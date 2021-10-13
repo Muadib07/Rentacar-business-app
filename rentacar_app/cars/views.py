@@ -1,13 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from django.views.generic import \
-    ( DetailView,
-      ListView )
-
-from django.http import HttpResponseRedirect, HttpResponse
+from django.views.generic import DetailView, ListView
+from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
-from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 
@@ -15,7 +11,7 @@ from .models import Cars
 from .forms import CarsForm
 from .filters import CarFilter
 
-# Create your views here.
+
 
 
 def car_filter(request):
@@ -24,7 +20,7 @@ def car_filter(request):
     return render(request, 'cars/car_filter.html', {'filter': car_filter})
 
 
-class Car_list_view(ListView):
+class CarListView(ListView):
     template_name = "cars/cars.html"
     model = Cars
     context_object_name = 'cars'
@@ -53,6 +49,7 @@ def cars_list(request):
         cars = pg.page(1)
     return render(request, 'cars/cars.html', {'cars':cars})
 
+
 @staff_member_required
 def add_car(request):
     submitted = False
@@ -71,7 +68,6 @@ def add_car(request):
 
 class CarsDetailView(DetailView):
     template_name = "cars/cars_detail.html"
-    #queryset = Cars.objects.all()
 
     def get_object(self):
         id_ = self.kwargs.get("id")
@@ -80,25 +76,22 @@ class CarsDetailView(DetailView):
 def search_car(request):
     if request.method == "POST":
         search = request.POST.get('car_search')
-        #cars = Cars.objects.filter(mark=search)
         cars = Cars.objects.filter(Q(mark=search) | Q(model=search) )
         return render(request, "cars/search_car.html", {'query': search, 'query_base': cars})
     else:
         return render(request, "cars/search_car.html", {})
 
+
 @login_required(login_url="/user_account/login/")
 def get_reservation_view(request, cars_id):
     car = Cars.objects.get(pk=cars_id)
-    if car.car_is_rented == False:
+    if not car.car_is_rented:
         car.car_is_rented = True
         car.save()
         return render(request, "cars/cars_status.html", {'car': car})
     else:
         return render(request, "cars/cars_status.html", {'car': car})
 
-# def update_view(request, cars_id ):
-#     car = Cars.objects.get(pk=cars_id)
-#     return render(request, 'cars/cars_info_update.html', {'car':car})
 
 @staff_member_required
 def update_view(request, cars_id):

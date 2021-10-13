@@ -10,7 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
-from pathlib import Path
+import django_heroku
+import dj_database_url
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,9 +28,6 @@ SECRET_KEY = config("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'user_account',
@@ -55,7 +53,17 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
+#whitenoise.middleware.WhiteNoiseMiddleware
+# Radically simplified static file serving for
+# Python web apps. With a couple of lines of config
+# WhiteNoise allows your web app to serve its own
+# static files, making it a self-contained unit that
+# can be deployed anywhere without relying on nginx,
+# Amazon S3 or any other external service.
+
+
 
 ROOT_URLCONF = 'rentacar_app.urls'
 
@@ -150,6 +158,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
     os.path.join(BASE_DIR, 'media'),
 ]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_cdn')
@@ -171,8 +182,9 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 
-EMAIL_BACKEND = config("EMAIL_BACKEND")
-SENDGRID_API_KEY = config("SENDGRID_API_KEY")
+#EMAIL_BACKEND = config("EMAIL_BACKEND")
+#SENDGRID_API_KEY = config("SENDGRID_API_KEY")
 
-DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
+#DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
 
+django_heroku.settings(locals())

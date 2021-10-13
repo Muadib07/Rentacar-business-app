@@ -1,12 +1,8 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
-from django.conf import settings
-import os
-from django.utils.translation import ugettext_lazy as _
 
 
 class AccountManager(BaseUserManager):
-#    use_in_migrations = True
 
     def create_user(self, email, password=None):
         if not email:
@@ -50,12 +46,10 @@ class Account(AbstractBaseUser):
     def __str__(self):
         return self.email
 
-    # For checking permissions. to keep it simple all admin have ALL permissons
     def has_perm(self, perm, obj=None):
         return self.is_admin
 
-    # Does this user have permission to view this app? (ALWAYS YES FOR SIMPLICITY)
-    def has_module_perms(self, app_label):
+    def has_module_perms(app_label):
         return True
 
 
@@ -70,4 +64,4 @@ class ClientProfile(models.Model):
     address = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.user.email
+        return self.Account.email

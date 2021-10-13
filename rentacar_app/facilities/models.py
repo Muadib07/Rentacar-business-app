@@ -15,11 +15,3 @@ class Facility(models.Model):
 
     def __str__(self):
         return self.country + " " + self.city + " " + self.address
-
-
-# class Employee_allocation(models.Model):
-#     employee = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-#     facility = models.ForeignKey(Facility,
-#                                  on_delete=models.SET_NULL,
-#                                  blank=True,
-#                                  null=True,)

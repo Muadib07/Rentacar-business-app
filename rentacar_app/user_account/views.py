@@ -30,39 +30,8 @@ def register_view(request, *args, **kwargs):
         else:
             context['registration_form'] = form
 
-
     return render(request, 'user_account/register.html', context)
 
-# def logout_view(request, *args, **kwargs):
-#     logout(request)
-#     return redirect("http://127.0.0.1:8000/")
-#
-# def login_view(request, *args, **kwargs):
-
-
-# class UserListView(ListView):
-#     template_name = "user_account/user_list.html"
-#     model = Account
-#     context_object_name = 'users'
-#     paginate_by = 5
-
-# def user_list(request):
-#     pg = Paginator(Account.objects.all().order_by('id'), 2)
-#     page_number = request.GET.get('page')
-#     try:
-#         users = pg.page(page_number)
-#     except EmptyPage:
-#         users = pg.page(pg.num_pages)
-#     except PageNotAnInteger:
-#         users = pg.page(1)
-#     return render(request, 'user_account/user_list.html', {'users': users})
-#
-# def delete_user_view(request, user_id):
-#     user = Account.objects.get(pk=user_id)
-#     user.delete()
-#     return redirect('name_user_list_view')
-
-# TODO: ADD THIS METHOD.
 
 def account_view(request, *args, **kwargs):
     """
@@ -86,7 +55,6 @@ def account_view(request, *args, **kwargs):
         context['profile_image'] = account.profile_image.url
         context['hide_email'] = account.hide_email
 
-        # Define template variables
         is_self = True
         is_friend = False
         user = request.user
@@ -100,41 +68,3 @@ def account_view(request, *args, **kwargs):
         context['is_friend'] = is_friend
         context['BASE_URL'] = settings.BASE_URL
         return render(request, "account/account.html", context)
-
-# class SignUpView(CreateView):
-#     form_class = AccountRegistrationForm
-#     success_url = reverse_lazy('login')
-#     template_name = 'user_account/signup.html'
-#
-# def register(request):
-#     if request.method == 'POST':
-#         form = CustomUserCreationForm(data=request.POST)
-#         profile_form = ClientProfileForm(data=request.POST)
-#         if form.is_valid():
-#             form.save()
-#             profile_form.save()
-#             return render(request, 'user_account/change_password.html', {'change_password_form': form})
-#         else:
-#             messages.error(request, "źle wprowadzone dane.")
-#     else:
-#         form = PasswordChangeForm(request.user)
-#         profile_form = ClientProfileForm(request.user)
-#         context = {'form' : form, 'profile_form' : profile_form}
-#     return render(request, 'user_account/change_password.html', {'change_password_form': form})
-#
-#
-# def password_change_view(request):
-#     if request.method == 'POST':
-#         form = PasswordChangeForm(user=request.user, data=request.POST)
-#         if form.is_valid():
-#             form.save()
-#             update_session_auth_hash(request, form.user)
-#             messages.success(request, 'Twoje hasło zostało zmienione :)!')
-#             return render(request, 'user_account/change_password.html', {'change_password_form': form})
-#         else:
-#             messages.error(request, "źle wprowadzone dane.")
-#     else:
-#         form = PasswordChangeForm(request.user)
-#     return render(request, 'user_account/change_password.html', {'change_password_form': form})
-#
-#

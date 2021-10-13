@@ -19,7 +19,11 @@ def contact_form(request):
             recipients = ['mateusz.gralak1@wp.pl']
 
             try:
-                send_mail(subject, "Message: {},\n\n Contact:{}".format(message, contact_email), sender, recipients, fail_silently=True)
+                send_mail(subject,
+                          "Message: {},\n\n Contact:{}".format(message, contact_email),
+                          sender,
+                          recipients,
+                          fail_silently=True)
             except BadHeaderError:
                 return HttpResponse("Invalid header found")
             return HttpResponse("Email sended")
